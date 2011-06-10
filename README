@@ -1,0 +1,17 @@
+SmallFS
+
+Q: What is SmallFS ?
+A: SmallFS is a very low-overhead filesystem intended for small embedded
+   systems. It's very suitable to use on memory or sequencial devices, like
+   flash systems.
+
+Q: What are SmallFS limitations ?
+A: SmallFS only supports one directory, and regular files. Files are limited
+   to 4Gb in size. The whole filesystem is also limited to 4Gb.
+
+Q: How is SmallFS laid out ?
+A: SmallFS includes a 8-byte header, a root directory and the files 
+   themselves. Each directory entry uses 9 bytes plus the file name.
+   All files can be easily accessed by using a simple offset to start of
+   filesystem.
+
