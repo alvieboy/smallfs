@@ -129,13 +129,13 @@ SmallFSFile SmallFS_class::open(const char *name)
 
 		read(&e,sizeof(struct smallfs_entry));
 
-		read(buf,e.fnamesize);
-		buf[e.fnamesize] = '\0';
+		read(buf,e.namesize);
+		buf[e.namesize] = '\0';
 		/* Compare */
 		if (strcmp((const char*)buf,name)==0) {
 			spi_disable();
 
-			return SmallFSFile(BE32(e.foffset), BE32(e.size));
+			return SmallFSFile(BE32(e.offset), BE32(e.size));
 		}
 	}
 	spi_disable();
@@ -194,7 +194,22 @@ int SmallFSFile::readCallback(int s, void (*callback)(unsigned char, void*), voi
 
 void SmallFSFile::seek(int pos, int whence)
 {
+	int newpos;
 
+	if (whence==SEEK_SET)
+		newpos = pos;
+	else if (whence==SEEK_CUR)
+		newpos = seekpos + pos;
+	else
+		newpos = filesize + pos;
+
+	if (newpos>filesize)
+		newpos=filesize;
+
+	if (newpos<0)
+		newpos=0;
+
+	seekpos=newpos;
 }
 
 SmallFS_class SmallFS;

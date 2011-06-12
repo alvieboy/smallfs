@@ -9,6 +9,11 @@
 /** SmallFS filesystem magic */
 #define SMALLFS_MAGIC 0x50411F50
 
+#ifndef SEEK_SET
+# define SEEK_SET   0
+# define SEEK_CUR  1
+# define SEEK_END  2
+#endif
 
 struct smallfs_header {
 	unsigned int magic /** big-endian, magic number **/;
@@ -141,7 +146,7 @@ public:
 	 * @param name The file name
 	 * @return A new SmallFSFile object. You should call valid() to check
 	 * if file was successfully open.
-     */
+	 */
 	SmallFSFile open(const char *name);
 
 private:
